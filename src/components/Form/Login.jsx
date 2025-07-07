@@ -1,28 +1,26 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
-import { useDispatch } from 'react-redux'
-import { useForm } from 'react-hook-form'
-import { login as onLogin } from '../store/authSlice.js'
-import authService from '../appwrite/auth.js'
-import { Button, Input, Logo } from './index.js'
-
+import { Button, Input, Logo } from "../index.js"
+import { login } from '../../store/authSlice.js'
+import { useDispatch } from "react-redux"
+import { useForm } from "react-hook-form"
+import { authService } from "../../appwrite/index.js"
 
 function Login() {
-  const [error, setError] = useState();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
+  const [error, setError] = useState("")
+  const { register, handleSubmit } = useForm()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const login = async (data) => {
-    setError("");
+
+  const loginUser = async (data) => {
+    setError("")
     try {
       const session = await authService.login(data)
       if (session) {
-        const userData = await authService.getCurrentUser();
-        if (userData) {
-          dispatch(onLogin(userData));
-          navigate("/");
-        }
+        const userData = await authService.getCurrentUser()
+        if (userData) dispatch(login({ userData }));
+        navigate("/")
       }
     } catch (error) {
       setError(error.message)
@@ -39,7 +37,7 @@ function Login() {
             <Logo width="100%" />
           </span>
         </div>
-        <h2 className="text-center text-2xl font-bold leading-tight">Sign in to your account</h2>
+        <h2 className="text-center text-2xl font-bold leading-tight">Log in to your account</h2>
         <p className="mt-2 text-center text-base text-black/60">
           Don&apos;t have any account?&nbsp;
           <Link
@@ -49,10 +47,10 @@ function Login() {
             Sign Up
           </Link>
         </p>
-        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
+        {error && <p className="text-red-700 mt-8 text-center">{error}</p>}
         <form
           className='mt-8'
-          onSubmit={handleSubmit(login)}
+          onSubmit={handleSubmit(loginUser)}
         >
           <div className='space-y-5'>
             <Input
@@ -62,7 +60,7 @@ function Login() {
               {...register("email", {
                 required: true,
                 validate: {
-                  matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                  matchPatern: value => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
                     "Email address must be a valid address",
                 }
               })}
@@ -76,9 +74,11 @@ function Login() {
               })}
             />
             <Button
-              type="submit"
               className="w-full"
-            >Sign in</Button>
+              type="submit"
+            >
+              Sign in
+            </Button>
           </div>
         </form>
       </div>

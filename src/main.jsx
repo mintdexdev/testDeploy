@@ -3,77 +3,71 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { Provider } from 'react-redux'
-import store from './store/store.js'
+import store from './store/store.js';
 import { createBrowserRouter, RouterProvider } from 'react-router'
-import { AuthLayout, Login } from './components/index.js'
-import {
-  Home,
-  Signup,
-  AddPost,
-  AllPost,
-  EditPost,
-  Post,
-} from './pages'
+import { AddPost, EditPost, Home, Login, Post, Signup } from './pages/index.js'
+import { AuthContainer } from './components/index.js'
+import AllPosts from './pages/AllPost.jsx'
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <App />,
     children: [
       {
-        path: "/",
-        element: <Home />,
+        path: '/',
+        element: <Home />
       },
       {
-        path: "/login",
+        path: '/login',
         element: (
-          <AuthLayout authRequired={false}>
+          <AuthContainer authRequired={false}>
             <Login />
-          </AuthLayout>
-        ),
+          </AuthContainer>
+        )
       },
       {
         path: "/signup",
         element: (
-          <AuthLayout authRequired={false}>
+          <AuthContainer authRequired={false}>
             <Signup />
-          </AuthLayout>
+          </AuthContainer>
         ),
       },
       {
         path: "/all-posts",
         element: (
-          <AuthLayout authRequired>
+          <AuthContainer authRequired>
             {" "}
-            <AllPost />
-          </AuthLayout>
+            <AllPosts />
+          </AuthContainer>
         ),
       },
       {
         path: "/add-post",
         element: (
-          <AuthLayout authRequired>
+          <AuthContainer authRequired>
             {" "}
             <AddPost />
-          </AuthLayout>
+          </AuthContainer>
         ),
       },
       {
         path: "/edit-post/:slug",
         element: (
-          <AuthLayout authRequired>
+          <AuthContainer authRequired>
             {" "}
             <EditPost />
-          </AuthLayout>
+          </AuthContainer>
         ),
       },
       {
         path: "/post/:slug",
         element: <Post />,
       },
-    ],
-  },
-]);
+    ]
+  }
+])
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

@@ -1,6 +1,6 @@
+import config from '../../config/config.js';
 import { Editor } from '@tinymce/tinymce-react';
 
-import config from '../config/config.js'
 
 // TinyMCE so the global var exists
 import 'tinymce/tinymce';
@@ -55,7 +55,7 @@ import 'tinymce/skins/ui/oxide/content';
 export default function BundledEditor(props) {
   return (
     <Editor
-      licenseKey={config.tinyMceLicenseKey}
+      licenseKey={config.tinymceLiscenseKey}
       {...props}
     />
   );

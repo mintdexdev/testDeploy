@@ -1,10 +1,11 @@
-@import 'tailwindcss';
-
-body {
-  background-color: #687080;
-}
+@import "tailwindcss";
 
 button,
-select {
+a {
   cursor: pointer;
+}
+
+body {
+  background-color: #121212;
+  color: #ededed;
 }

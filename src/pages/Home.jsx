@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Container, PostCard } from '../components/index.js'
-import appwriteOperation from '../appwrite/operation.js'
-import { useSelector } from 'react-redux';
+import { Container, PostCard } from '../components'
+import { postService } from '../appwrite'
+
 
 function Home() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([])
 
   useEffect(() => {
-    appwriteOperation.getPosts().then(allPost => {
-      if (allPost) {
-        setPosts(allPost.documents)
+    postService.getAllPosts().then(posts => {
+      if (posts) {
+        setPosts(posts.documents)
       }
     })
-  }, [])                                                                              
+  }, [])
 
   if (posts.length === 0) {
     return (
@@ -21,7 +21,7 @@ function Home() {
           <div className="flex flex-wrap">
             <div className="p-2 w-full">
               <h1 className="text-2xl font-bold hover:text-gray-500">
-                Empty
+                Login to read posts
               </h1>
             </div>
           </div>
@@ -29,6 +29,7 @@ function Home() {
       </div>
     )
   }
+
   return (
     <div className='w-full py-8'>
       <Container>

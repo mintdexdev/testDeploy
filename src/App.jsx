@@ -1,47 +1,39 @@
+import { useState, useEffect } from 'react'
 import './App.css'
-import React, { useEffect, useState } from 'react'
-import { Outlet } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { Footer, Header } from './components/index.js'
+
+import { authService } from './appwrite/index.js'
 import { login, logout } from './store/authSlice.js'
-import authService from './appwrite/auth.js'
+import { Footer, Header } from './components/index.js'
+import { Outlet } from 'react-router'
 
 function App() {
   const [loading, setLoading] = useState(true);
-
   const dispatch = useDispatch()
 
   useEffect(() => {
     authService.getCurrentUser()
-      .then(userData => {
+      .then((userData) => {
         if (userData) {
           dispatch(login({ userData }))
         } else {
           dispatch(logout())
         }
       })
-      // .catch(error => { console.error("Failed to get current user:", error); })
       .finally(() => setLoading(false))
-
   }, [])
 
-  if (loading) {
-    return (
-      <div>Please Login</div>
-    )
-  }
-
-  return (
+  return !loading ? (
     <div className='min-h-screen flex flex-wrap content-between'>
       <div className='w-full block'>
         <Header />
-        <main>
+        <main className='min-h-screen'>
           <Outlet />
         </main>
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </div>
-  )
+  ) : null
 }
 
 export default App

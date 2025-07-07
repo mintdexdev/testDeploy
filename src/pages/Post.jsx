@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container } from "../components/index.js";
+import { Button, Container } from "../components";
 import { Link, useNavigate, useParams } from "react-router";
-import appwriteOperation from "../appwrite/operation.js";
-import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import { imageService, postService } from '../appwrite'
+import parse from "html-react-parser";
 
-function Post() {
+export default function Post() {
   const [post, setPost] = useState(null);
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  const userData = useSelector((state) => state.authReducer.userData);
+  const userData = useSelector(state => state.authReducer.userData);
 
   const isAuthor = post && userData ? post.userId === userData.$id : false;
 
   useEffect(() => {
     if (slug) {
-      appwriteOperation.getPost(slug).then((currentPost) => {
-        if (currentPost) setPost(currentPost);
+      postService.getPost(slug).then((post) => {
+        if (post) setPost(post);
         else navigate("/");
       });
     } else navigate("/");
   }, [slug, navigate]);
 
   const deletePost = () => {
-    appwriteOperation.deletePost(post.$id).then((status) => {
+    postService.deletePost(post.$id).then((status) => {
       if (status) {
-        appwriteOperation.deleteFile(post.coverImage);
+        imageService.deleteImage(post.coverImageId);
         navigate("/");
       }
     });
@@ -37,7 +37,7 @@ function Post() {
       <Container>
         <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
           <img
-            src={appwriteOperation.getFileView(post.coverImage)}
+            src={imageService.viewImage(post.coverImageId)}
             alt={post.title}
             className="rounded-xl"
           />
@@ -65,5 +65,3 @@ function Post() {
     </div>
   ) : null;
 }
-
-export default Post;
