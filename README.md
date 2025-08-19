@@ -1,5 +1,5 @@
 # Testing
 
-deployed in digital ocean using this repo
+deploy testing using this repo
 
-learning from backend series of chai aur code
+current learning from backend series of chai aur code
